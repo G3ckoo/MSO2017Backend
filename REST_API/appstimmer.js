@@ -1,3 +1,5 @@
+var AppStimmerCtrl = require('../controller/AppStimmerCtrl.js');
+
 module.exports = function(app) {
     //Lädt einen bestimmten AppStimmer
     app.get("/AppStimmer/:id", function(req, res) {
@@ -31,5 +33,5 @@ module.exports = function(app) {
         var id = req.params.id;
         
         res.send(501);
-    }));
+    });
 }

@@ -6,7 +6,8 @@
   "author": "Marcel",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "express": "^4.15.4"
+    "express": "^4.15.4",
+    "lokijs": "^1.5.1"
   },
   "scripts": {
     "start": "node server.js"

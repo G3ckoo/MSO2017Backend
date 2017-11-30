@@ -1,13 +1,15 @@
-var AppStimmer = require('../model/AppStimmer.js');
+var AppStimmerService = require('../services/AppStimmerService.js');
 
 module.exports = {
-    get: function(id) {
-        return new AppStimmer(
-            id, 
-            "AppStimmer #0", // Titel
-            "Das ist ein statisch generierter AppStimmer.", // Abstract
-            "", // Beschreibung
-            "" // Bild(-Pfad)
-        );
+    findById: function(id) {
+        return AppStimmerService.findById(id);
+    },
+    
+    list: function(skip, take) {
+        return AppStimmerService.get(skip, take);
+    },
+    
+    save: function(appStimmer) {
+        AppStimmerService.save(appStimmer);
     }
 }
