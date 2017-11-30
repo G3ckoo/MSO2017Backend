@@ -1,0 +1,14 @@
+{
+  "name": "AppStimmerServer",
+  "version": "0.0.0",
+  "description": "Ein einfacher REST-Server für die 'AppStimmer'-App.",
+  "main": "server.js",
+  "author": "Marcel",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
