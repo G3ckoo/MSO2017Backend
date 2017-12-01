@@ -1,10 +1,9 @@
+var AppStimmer = require('../model/AppStimmer.js');
 var AppStimmerCtrl = require('../controller/AppStimmerCtrl.js');
 
 module.exports = function(app) {
     //Lädt einen bestimmten AppStimmer
     app.get("/AppStimmer/:id", function(req, res) {
-        var skip = req.query.skip || 0;
-        var take = req.query.take || 100;
         var id = req.params.id;
         
         res.send(501);
@@ -12,7 +11,13 @@ module.exports = function(app) {
     
     //Lädt alle AppStimmr
     app.get("/AppStimmer", function(req, res) {
-        res.send(501);
+        var skip = req.query.skip;
+        var take = req.query.take;
+        
+        var appstimmerList = AppStimmerCtrl.list(skip, take);
+        
+        res.status = 200;
+        res.send(appstimmerList);
     });
     
     //Stimmt für einen bestimmten AppStimmer
@@ -20,6 +25,25 @@ module.exports = function(app) {
         var id = req.params.id;
         
         res.send(501); 
+    });
+    
+    app.post("/AppStimmer", function(req, res) {
+        var id = req.body.id;
+        var title = req.body.title;
+        var abstract = req.body.abstract;
+        var description = req.body.description;
+        var imagePath = "";
+        
+        //var appStimmer = Object.create(AppStimmer);
+        AppStimmerCtrl.save({
+            id: id, 
+            title: title, 
+            abstract: abstract,
+            description: description,
+            image: imagePath
+        });
+        
+        res.send(200);
     });
     
     //Stimmt gegen einen bestimmten AppStimmer
