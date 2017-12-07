@@ -17,13 +17,13 @@ var self = module.exports = {
         function(array) {
             var range = [];
             for (var i = skip; i < array.length && i < take; i++) {
-                range[i] = this.mapAppstimmer(array[i]);
+                range[i] = array[i]//this.mapAppstimmer(array[i]);
             }
             return range;
         }.bind(this));
     },
 
     mapAppstimmer: function (appstimmer) {
-        return {"id":appstimmer.id, "title": appstimmer.title };
+        return {"id":appstimmer.id, "title": appstimmer.title,  };
     }
 };

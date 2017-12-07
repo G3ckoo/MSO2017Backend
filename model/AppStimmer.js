@@ -5,7 +5,7 @@ module.exports = {
         this.abstract = abstract;
         this.description = description;
         this.image = image;
-        this.creator = user;
+        this.user = user;
         this.votes = votes;
     }
 };

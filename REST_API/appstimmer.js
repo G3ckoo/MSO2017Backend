@@ -32,15 +32,16 @@ module.exports = function(app) {
         var title = req.body.title;
         var abstract = req.body.abstract;
         var description = req.body.description;
-        var imagePath = "";
-        
+        var imagePath = req.body.image;
+        var user = req.body.user;
         //var appStimmer = Object.create(AppStimmer);
         AppStimmerCtrl.save({
             id: id, 
             title: title, 
             abstract: abstract,
             description: description,
-            image: imagePath
+            image: imagePath,
+            user: user
         });
         
         res.send(200);
