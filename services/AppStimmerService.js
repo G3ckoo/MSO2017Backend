@@ -24,8 +24,38 @@ var self = module.exports = {
             return range;
         }.bind(this));
     },
-
-    mapAppstimmer: function (appstimmer) {
-        return {"id":appstimmer.id, "title": appstimmer.title,  };
+    
+    deleteById: function(id) {
+        var deleted = false;
+        var results = dbaccess.appstimmer.chain().remove({id: id});
+        if (true) {
+            //results.remove();
+            deleted = true;
+        }
+        return deleted;
+    },
+    
+    upvote: function(id) {
+        var upvoted = false;
+        var result = dbaccess.appstimmer.chain().find({id: id});
+        if (result != undefined) {
+            var value = result.upvotes;
+            value++;
+            result.update({upvotes: value});
+            upvoted = true;
+        }
+        return upvoted;
+    },
+    
+    downvote: function(id) {
+        var downvoted = false;
+        var result = dbaccess.appstimmer.chain().find({id: id}).update({downvotes:5});
+//        if (result != undefined) {
+//            var value = result.downvotes;
+//            value++;
+//            result.update({"downvotes": value});
+//            downvoted = true;
+//        }
+        return downvoted;
     }
 };
