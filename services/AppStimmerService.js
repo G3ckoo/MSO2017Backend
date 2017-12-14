@@ -27,9 +27,9 @@ var self = module.exports = {
     
     deleteById: function(id) {
         var deleted = false;
-        var results = dbaccess.appstimmer.chain().remove({id: id});
-        if (true) {
-            //results.remove();
+        var results = dbaccess.appstimmer.chain().find({id: 4}).data();
+        if (results != undefined) {
+            dbaccess.appstimmer.remove(results);
             deleted = true;
         }
         return deleted;
@@ -37,11 +37,12 @@ var self = module.exports = {
     
     upvote: function(id) {
         var upvoted = false;
-        var result = dbaccess.appstimmer.chain().find({id: id});
-        if (result != undefined) {
-            var value = result.upvotes;
+        var results = dbaccess.appstimmer.chain().find({'id':Number.parseInt(id)}).data();
+        if (results != undefined) {
+            var value = results[0].upvotes;
             value++;
-            result.update({upvotes: value});
+            results[0].upvotes = value;
+            dbaccess.appstimmer.update(results);
             upvoted = true;
         }
         return upvoted;
@@ -49,13 +50,14 @@ var self = module.exports = {
     
     downvote: function(id) {
         var downvoted = false;
-        var result = dbaccess.appstimmer.chain().find({id: id}).update({downvotes:5});
-//        if (result != undefined) {
-//            var value = result.downvotes;
-//            value++;
-//            result.update({"downvotes": value});
-//            downvoted = true;
-//        }
+        var results = dbaccess.appstimmer.chain().find({'id':Number.parseInt(id)}).data();
+        if (results != undefined) {
+            var value = results[0].downvotes;
+            value++;
+            results[0].downvotes = value;
+            dbaccess.appstimmer.update(results);
+            downvoted = true;
+        }
         return downvoted;
     }
 };
