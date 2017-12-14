@@ -25,6 +25,11 @@ require('./REST_API/login.js')(app);
 require('./REST_API/appstimmer.js')(app);
 
 
+// Initialize Data =================================================================================================
+// put example AppStimmer
+require('./db/initialize.js')();
+
+
 // Launch ===========================================================================================================
 app.listen(options.port);
 console.log(options.server_started);
