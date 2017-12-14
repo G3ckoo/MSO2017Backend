@@ -23,7 +23,27 @@ module.exports = function(app) {
     app.put("/AppStimmer/:id/Upvote", function(req, res) {
         var id = req.params.id;
         
-        res.status(501).send(); 
+        res.send(501); 
+    });
+    
+    app.post("/AppStimmer", function(req, res) {
+        var id = req.body.id;
+        var title = req.body.title;
+        var abstract = req.body.abstract;
+        var description = req.body.description;
+        var imagePath = req.body.image;
+        var user = req.body.user;
+        //var appStimmer = Object.create(AppStimmer);
+        AppStimmerCtrl.save({
+            id: id, 
+            title: title, 
+            abstract: abstract,
+            description: description,
+            image: imagePath,
+            user: user
+        });
+        
+        res.send(200);
     });
     
     //Stimmt gegen einen bestimmten AppStimmer
