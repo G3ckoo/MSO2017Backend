@@ -6,7 +6,7 @@ module.exports = function(app) {
     app.get("/AppStimmer/:id", function(req, res) {
         var id = req.params.id;
         
-        res.send(501);
+        res.status(501).send();
     });
     
     //Lädt alle AppStimmr
@@ -16,46 +16,52 @@ module.exports = function(app) {
         
         var appstimmerList = AppStimmerCtrl.list(skip, take);
         
-        res.status = 200;
-        res.send(appstimmerList);
+        res.status(200).json(appstimmerList);
     });
     
     //Stimmt für einen bestimmten AppStimmer
     app.put("/AppStimmer/:id/Upvote", function(req, res) {
         var id = req.params.id;
         
-        res.send(501); 
-    });
-    
-    app.post("/AppStimmer", function(req, res) {
-        var id = req.body.id;
-        var title = req.body.title;
-        var abstract = req.body.abstract;
-        var description = req.body.description;
-        var imagePath = "";
-        
-        //var appStimmer = Object.create(AppStimmer);
-        AppStimmerCtrl.save({
-            id: id, 
-            title: title, 
-            abstract: abstract,
-            description: description,
-            image: imagePath
-        });
-        
-        res.send(200);
+        res.status(501).send(); 
     });
     
     //Stimmt gegen einen bestimmten AppStimmer
     app.put("/AppStimmer/:id/Downvote", function(req, res) {
         var id = req.params.id;
         
-        res.send(501); 
+        res.status(501).send(); 
+    });
+    
+    app.post("/AppStimmer", function(req, res) {
+        var error = '', status = 501;
+        var appstimmer = AppStimmer.create(
+            req.body.id,
+            req.body.title,
+            req.body.abstract,
+            req.body.description,
+            req.body.image,
+            req.body.user,
+            req.body.upvotes,
+            req.body.downvotes
+        );
+        
+        console.log("id=" + req.body.id);
+        var id = AppStimmerCtrl.save(appstimmer);
+        
+        if (id != undefined) {
+            status = 200;    
+        } else {
+            status = 500;
+            error = 'Etwas ist beim Speichern schief gelaufen.';
+        }
+        
+        res.status(status).send({id:id, errorMessage:error});
     });
     
     app.delete("AppStimmer/:id", function(req, res) {
         var id = req.params.id;
         
-        res.send(501);
+        res.status(501).send();
     });
 }

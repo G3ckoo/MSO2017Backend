@@ -6,10 +6,10 @@ module.exports = {
     },
     
     list: function(skip, take) {
-        return AppStimmerService.get(skip, take);
+        return AppStimmerService.list(skip, take);
     },
     
     save: function(appStimmer) {
-        AppStimmerService.save(appStimmer);
+        return AppStimmerService.save(appStimmer);
     }
 }

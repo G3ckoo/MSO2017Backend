@@ -1,11 +1,14 @@
 module.exports = {
-    constructor: function AppStimmer(id, title, abstract, description, image, user, votes) {
-        this.id = id;
-        this.title = title;
-        this.abstract = abstract;
-        this.description = description;
-        this.image = image;
-        this.creator = user;
-        this.votes = votes;
+    create: function(_id, _title, _abstract, _description, _image, _user, _upvotes, _downvotes) {
+        return {
+            id: _id,
+            title: _title,
+            abstract: _abstract,
+            description: _description,
+            image: _image,
+            creator: _user,
+            upvotes: _upvotes,
+            downvotes: _downvotes
+        }
     }
-};
+}

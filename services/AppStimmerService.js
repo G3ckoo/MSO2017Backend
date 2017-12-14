@@ -6,7 +6,9 @@ module.exports = {
     },
     
     save: function(appstimmer) {
+        // TODO: auto-increment and return id 
         dbaccess.appstimmer.insert(appstimmer);
+        return appstimmer.id;
     },
     
     list: function(skip, take) {
@@ -16,7 +18,7 @@ module.exports = {
         function(array) {
             var range = [];
             for (var i = skip; i < array.length && i < take; i++) {
-                range += array[i];
+                range[i] = array[i];
             }
             return range;
         })
