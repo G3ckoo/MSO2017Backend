@@ -26,26 +26,6 @@ module.exports = function(app) {
         res.send(501); 
     });
     
-    app.post("/AppStimmer", function(req, res) {
-        var id = req.body.id;
-        var title = req.body.title;
-        var abstract = req.body.abstract;
-        var description = req.body.description;
-        var imagePath = req.body.image;
-        var user = req.body.user;
-        //var appStimmer = Object.create(AppStimmer);
-        AppStimmerCtrl.save({
-            id: id, 
-            title: title, 
-            abstract: abstract,
-            description: description,
-            image: imagePath,
-            user: user
-        });
-        
-        res.send(200);
-    });
-    
     //Stimmt gegen einen bestimmten AppStimmer
     app.put("/AppStimmer/:id/Downvote", function(req, res) {
         var id = req.params.id;
@@ -65,8 +45,6 @@ module.exports = function(app) {
             req.body.upvotes,
             req.body.downvotes
         );
-        
-        console.log("id=" + req.body.id);
         var id = AppStimmerCtrl.save(appstimmer);
         
         if (id != undefined) {
