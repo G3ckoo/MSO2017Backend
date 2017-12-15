@@ -1,13 +1,12 @@
 module.exports = {
-    create: function User(id, firstName, lastName, age, zipCode, favorites, image) {
+    create: function User(firstName, lastName, userName, password, passwordConf, image) {
         return {
-            id: id,
             firstName: firstName,
             lastName: lastName,
-            image: image,
-            age: age,
-            zipCode: zipCode,
-            favourites: favourites
+            userName: userName,
+            password: password,
+            passwordConf: passwordConf,
+            imagePath: "images/" + image,
         }
     }
 }

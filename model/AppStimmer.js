@@ -1,14 +1,13 @@
 module.exports = {
-    create: function(_id, _title, _abstract, _description, _image, _user, _upvotes, _downvotes) {
+    create: function(_title, _abstract, _description, _creator, _image, _user) {
         return {
-            id: _id,
             title: _title,
             abstract: _abstract,
             description: _description,
-            image: _image,
-            creator: _user,
-            upvotes: _upvotes,
-            downvotes: _downvotes
+            creator: _creator,
+            upvotes: 0,
+            downvotes: 0,
+            attachments: []
         }
     }
 }

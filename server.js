@@ -23,6 +23,8 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 require('./REST_API/login.js')(app);
 // AppStimmer-operations
 require('./REST_API/appstimmer.js')(app);
+// User-operations
+require('./RESt_API/user.js')(app);
 
 
 // Initialize Data =================================================================================================
