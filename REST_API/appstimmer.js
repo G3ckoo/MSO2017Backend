@@ -1,99 +1,66 @@
-var AppStimmer = require('../model/AppStimmer.js');
 var Response = require('../model/Response.js');
-var AppStimmerCtrl = require('../controller/AppStimmerCtrl.js');
 
-module.exports = function(app) {
+module.exports = function(app, Schemas) {
+    var AppStimmerCtrl = require('../controller/AppStimmerCtrl.js')(Schemas);
+    var defaultCallback = function(res, err, result) {
+        if (err) {
+            res.status(500).send(Response.create(err, null));
+        } else {
+            res.status(200).send(Response.create(null, result));
+        }
+    };
+    
     //Lädt einen bestimmten AppStimmer
     app.get("/AppStimmer/:id", function(req, res) {
-        var status = 501, error = '';
-        var appStimmer = AppStimmerCtrl.findById(req.params.id);
-        
-        if (appStimmer == undefined) {
-            status = 500;
-            error = "AppStimmer mit der id " + req.params.id + " konnte nicht gefunden werden.";
-        } else {
-            status = 200;
-        }
-        res.status(status).send(Response.create(error, appStimmer));
+        AppStimmerCtrl.findById(req, function(err, result) {
+            defaultCallback(res, err, result);
+        });
     });
     
     //Lädt alle AppStimmr
     app.get("/AppStimmer", function(req, res) {
-        var skip = req.query.skip;
-        var take = req.query.take;
-        var status = 501, error = '';
-        
-        var appstimmerList = AppStimmerCtrl.list(skip, take);
-        if (appstimmerList == undefined) {
-            status = 500;
-            error = "AppStimmer konnten nicht geladen werden.";
-        } else {
-            status = 200;
-        }
-        
-        res.status(status).send(Response.create(error, appstimmerList));
+        AppStimmerCtrl.list(req, function(err, result) {
+            defaultCallback(res, err, result);
+        });
     });
     
     //Stimmt für einen bestimmten AppStimmer
     app.put("/AppStimmer/:id/Upvote", function(req, res) {
-        var status = 501, error = '';
-        var success = AppStimmerCtrl.upvote(req.params.id);
-        if (success) {
-            status = 200;
-        } else {
-            status = 500;
-            error = "AppStimmer mit der id " + req.params.id + " konnte nicht geupvoted werden.";
-        }
-        res.status(status).send(Response.create(error, "AppStimmer mit der id " + req.params.id + " wurde erfolgreich geupvoted.")); 
+        AppStimmerCtrl.upvote(req, function(err, result) {
+            defaultCallback(res, err, result);
+        });
     });
     
     //Stimmt gegen einen bestimmten AppStimmer
     app.put("/AppStimmer/:id/Downvote", function(req, res) {
-        var status = 501, error = '';
-        var success = AppStimmerCtrl.downvote(req.params.id);
-        if (success) {
-            status = 200;
-        } else {
-            status = 500;
-            error = "AppStimmer mit der id " + req.params.id + " konnte nicht gedownvoted werden.";
-        }
-        res.status(status).send(Response.create(error, "AppStimmer mit der id " + req.params.id + " wurde erfolgreich gedownvoted.")); 
+        AppStimmerCtrl.downvote(req, function(err, result) {
+            defaultCallback(res, err, result);
+        });
     });
     
     app.post("/AppStimmer", function(req, res) {
-        var error = '', status = 501;
-        var appstimmer = AppStimmer.create(
-            req.body.id,
-            req.body.title,
-            req.body.abstract,
-            req.body.description,
-            req.body.image,
-            req.body.user,
-            req.body.upvotes,
-            req.body.downvotes
-        );
-        var id = AppStimmerCtrl.save(appstimmer);
-        
-        if (id == undefined) {
-            status = 500;
-            error = "AppStimmer konnte nicht gespeichert werden.";    
-        } else {
-            status = 200;
+        var error = '', status = 501, result;
+        if (req.body.title) {
+            AppStimmerCtrl.insert(req, function(err, appStimmer) {
+                defaultCallback(res, err, appStimmer);
+            });
         }
-        
-        res.status(status).send({id:id, errorMessage:error});
+        else {
+            status = 400;
+            error = 'Es wurden nicht alle benötigten Parameter übergeben.';
+            res.status(status).send(Response.create(error, result));
+        }
     });
     
-    app.delete("AppStimmer/:id", function(req, res) {
-        var status = 501, error = '';
-        var deleted = AppStimmerCtrl.deleteById(req.params.id);
-        if (deleted) {
-            status = 200;
-        } else {
-            status = 500;
-            error = "AppStimmer mit der id " + req.params.id + " konnte nicht gelöscht werden.";
-        }
-        
-        res.status(status).send(Response.create(error, "AppStimmer mit der id " + req.params.id + " wurde erfolreich gelöscht."));
+    app.delete("/AppStimmer/:id", function(req, res) {
+        AppStimmerCtrl.delete(req, function(err) {
+            if (err) {
+                console.log(error);
+                res.status(500).send(Response.create(err, {}));
+            }
+            else {
+                res.status(200).send(Response.create(null, "AppStimmer mit der id " + req.params.id + " wurde erfolreich gelöscht."));
+            }
+        });
     });
 }

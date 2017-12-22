@@ -1,63 +1,47 @@
-var dbaccess = require('../db/dbaccess.js');
-"use strict"
-var self = module.exports = {
+module.exports = function(Schemas) {
+    var AppStimmer = Schemas.AppStimmer;
+    
+    return {
+        findById: function(id, callback) {
+            AppStimmer.findById(id, callback);
+        },
 
-    findById: function(id) {
-        return dbaccess.appstimmer.find({'id':id});
-    },
-    
-    save: function(appstimmer) {
-        // TODO: auto-increment and return id 
-        dbaccess.appstimmer.insert(appstimmer);
-        return appstimmer.id;
-    },
-    
-    list: function(skip, take) {
-        skip = skip || 0;
-        take = take || 10000;
-        return dbaccess.appstimmer.mapReduce(function(obj) { return obj; },
-        function(array) {
-            var range = [];
-            for (var i = skip; i < array.length && i < take; i++) {
-                range[i] = array[i];
-            }
-            return range;
-        }.bind(this));
-    },
-    
-    deleteById: function(id) {
-        var deleted = false;
-        var results = dbaccess.appstimmer.chain().find({id: 4}).data();
-        if (results != undefined) {
-            dbaccess.appstimmer.remove(results);
-            deleted = true;
+        insert: function(appStimmerModel, callback) {
+            var appStimmer = new AppStimmer(appStimmerModel);
+            appStimmer.save(callback);
+        },
+
+        list: function(options, callback) {
+            var skip = options.skip || 0;
+            var take = options.take || 10000;
+
+            AppStimmer.find({}, callback);
+        },
+
+        delete: function(id, callback) {
+            AppStimmer.findByIdAndRemove(id, callback);
+        },
+
+        upvote: function(id, callback) {
+            AppStimmer.findById(id, function(err, appStimmer) {
+                if (err) callback(err, null);
+
+                var upvotes = appStimmer.upvotes;
+                upvotes++;
+                appStimmer.upvotes = upvotes;
+                appStimmer.save(callback);
+            });
+        },
+
+        downvote: function(id, callback) {
+            AppStimmer.findById(id, function(err, appStimmer) {
+                if (err) callback(err, null);
+
+                var downvotes = appStimmer.downvotes;
+                downvotes++;
+                appStimmer.downvotes = downvotes;
+                appStimmer.save(callback);
+            });
         }
-        return deleted;
-    },
-    
-    upvote: function(id) {
-        var upvoted = false;
-        var results = dbaccess.appstimmer.chain().find({'id':Number.parseInt(id)}).data();
-        if (results != undefined) {
-            var value = results[0].upvotes;
-            value++;
-            results[0].upvotes = value;
-            dbaccess.appstimmer.update(results);
-            upvoted = true;
-        }
-        return upvoted;
-    },
-    
-    downvote: function(id) {
-        var downvoted = false;
-        var results = dbaccess.appstimmer.chain().find({'id':Number.parseInt(id)}).data();
-        if (results != undefined) {
-            var value = results[0].downvotes;
-            value++;
-            results[0].downvotes = value;
-            dbaccess.appstimmer.update(results);
-            downvoted = true;
-        }
-        return downvoted;
-    }
-};
+    };
+}

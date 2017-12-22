@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser');
 
 
 // apply polyfills =================================================================================================
@@ -8,30 +7,41 @@ var bodyParser = require('body-parser');
 
 
 // Options =========================================================================================================
-var options = {};
-options.port = 8080;
-options.server_started = "Server started on port " + options.port;
+var config = require('./config.js');
+var bodyParser = require('body-parser');
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies           
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-    extended: true,             
-})); 
+    extended: true
+}));
+
+
+// Initialize MongoDB/mongoose =====================================================================================
+// Set Bluebird as Promises library
+var mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+var mongoDB = mongoose.createConnection(
+    config.db_connection_string,
+    config.db_options
+);
+mongoDB.on('open', function() {
+    console.log(config.db_connected);
+});
+
+
+// Initialize Schemas ==============================================================================================
+var Schemas = require('./db/Schemas.js')(mongoDB);
 
 
 // RESTful API =====================================================================================================
 // login POST /token
-require('./REST_API/login.js')(app);
+require('./REST_API/login.js')(app, Schemas);
 // AppStimmer-operations
-require('./REST_API/appstimmer.js')(app);
+require('./REST_API/appstimmer.js')(app, Schemas);
 // User-operations
-require('./RESt_API/user.js')(app);
+require('./RESt_API/user.js')(app, Schemas);
 
 
-// Initialize Data =================================================================================================
-// put example AppStimmer
-require('./db/initialize.js')();
-
-
-// Launch ===========================================================================================================
-app.listen(options.port);
-console.log(options.server_started);
+// Launch ==========================================================================================================
+app.listen(config.server_port);
+console.log(config.server_started);

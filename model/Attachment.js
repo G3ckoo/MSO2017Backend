@@ -1,17 +1,10 @@
 module.exports = {
-    create: function(type, value) {
+    create: function(isMainAttachment, attachmentType, source, description) {
         return {
-            type: type, // Location, Audio, Video, Picture, Text, Document
-            value: value // Path to File or Text
+            isMainAttachment: isMainAttachment,
+            attachmentType: type, // Location, Audio, Video, Picture, Text, Document
+            source: value, // Path to File, or Text
+            description: description // optional image-description
         }
-    },
-    
-    types: {
-        LOCATION: "Location",
-        AUDIO: "Audio",
-        VIDEO: "Video",
-        PICTURE: "Picture",
-        TEXT: "Text",
-        DEOCUMENT: "Document"
     }
 }

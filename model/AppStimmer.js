@@ -1,10 +1,7 @@
 module.exports = {
-    create: function(_title, _abstract, _description, _creator, _image, _user) {
+    create: function(title) {
         return {
-            title: _title,
-            abstract: _abstract,
-            description: _description,
-            creator: _creator,
+            title: title,
             upvotes: 0,
             downvotes: 0,
             attachments: []
