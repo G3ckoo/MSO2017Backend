@@ -7,7 +7,7 @@ module.exports = function(mongoDB) {
             type: Boolean,
             required: true
         },
-        type: {
+        attachmentType: {
             type: String,
             enum: AttachmentTypes.asArray,
             required: true

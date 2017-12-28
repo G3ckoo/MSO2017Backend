@@ -35,11 +35,13 @@ var Schemas = require('./db/Schemas.js')(mongoDB);
 
 // RESTful API =====================================================================================================
 // login POST /token
-require('./REST_API/login.js')(app, Schemas);
+//require('./REST_API/login.js')(app, Schemas);
 // AppStimmer-operations
 require('./REST_API/appstimmer.js')(app, Schemas);
+// Attachments-operations
+require('./REST_API/attachment.js')(app, Schemas);
 // User-operations
-require('./RESt_API/user.js')(app, Schemas);
+//require('./RESt_API/user.js')(app, Schemas);
 
 
 // Launch ==========================================================================================================

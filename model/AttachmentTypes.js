@@ -13,6 +13,24 @@ attachmentTypes.VIDEO = types[2];
 attachmentTypes.PICTURE = types[3];
 attachmentTypes.TEXT = types[4];
 attachmentTypes.DOCUMENT = types[5];
+
 attachmentTypes.asArray = types;
+
+attachmentTypes.contains = function(str) {
+    for (var type in types) {
+        if (type === str) {
+            return true;
+        }
+    }
+    return false;
+};
+
+attachmentTypes.get = function(str) {
+    if (attachmentTypes.contains(str)) {
+        return str;
+    } else {
+        return null;
+    }
+}
 
 module.exports = attachmentTypes;
