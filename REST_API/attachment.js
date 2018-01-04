@@ -31,7 +31,7 @@ module.exports = function(app, Schemas) {
     });
     
     // Fügt einem AppStimmer ein Attachment hinzu und gibt das Attachment zurück.
-    app.post("/Attachment/:appStimmerID", function(req, res) {
+    app.post("/AppStimmer/:appStimmerID/Attachment", function(req, res) {
         AttachmentCtrl.insert(req, function(err, attachment) {
             defaultCallback(res, err, attachment);
         });

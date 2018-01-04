@@ -3,8 +3,9 @@ module.exports = function(Schemas) {
     var AppStimmer = Schemas.AppStimmer;
     
     return {
-        insert: function(appStimmerID, attachmentModel, callback) {
+        insert: function(attachmentModel, callback) {
             var attachment = new Attachment(attachmentModel);
+            var appStimmerID = attachmentModel.appStimmer._id;
             attachment.save(function(err, attachment) {
                 if (err) {
                     callback(err, null);
@@ -34,7 +35,7 @@ module.exports = function(Schemas) {
             Attachment.find({}, callback);
         },
 
-        update: function(attachmentID, attachmentModel, callback) {
+        update: function(attachmentModel, callback) {
             Attachment.findById(attachmentID, function(err, attachment) {
                 if (err) callback(err, null);
 

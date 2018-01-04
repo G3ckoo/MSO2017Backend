@@ -4,21 +4,27 @@ var AttachmentTypes = require('../model/AttachmentTypes.js');
 module.exports = function(Schemas) {
     var AttachmentService = require('../services/AttachmentService.js')(Schemas);
     
-    function getAttachmentModel(req) {
-        return AttachmentModel.create(
-            req.body.isMainAttachment,
-            req.body.attachmentType,
-            req.body.source,
-            req.body.description
-        );
+    function createAttachmentModel(req, callback) {
+        Schemas.AppStimmer.findById(req.params.appStimmerID, function(err, appStimmer) {
+            if (err) callback(err, null);
+            
+            var attachmentModel = AttachmentModel.create(
+                appStimmer,
+                req.body.isMainAttachment,
+                req.body.attachmentType,
+                req.body.source,
+                req.body.description
+            );
+            callback(null, attachmentModel);
+        });
     }
     
     return {
         insert: function(req, callback) {
-            if (req.body.isMainAttachment && req.body.attachmentType && req.body.source) {
-                var appStimmerID = req.params.appStimmerID;
-                var attachmentModel = getAttachmentModel(req);
-                AttachmentService.insert(appStimmerID, attachmentModel, callback);
+            if (req.params.appStimmerID && req.body.isMainAttachment && req.body.attachmentType && req.body.source) {
+                createAttachmentModel(req, function(err, attachmentModel) {
+                    AttachmentService.insert(attachmentModel, callback);
+                });
             }
             else {
                 var error = "Es wurden nicht alle benötigten Parameter übergeben: isMainAttachment, attachmentType, source";
@@ -46,12 +52,9 @@ module.exports = function(Schemas) {
         },
 
         update: function(req, callback) {
-            var id = req.params.attachmentID;
-            var attachmentModel = getAttachmentModel(req);
-            AttachmentService.update(id, attachmentModel, callback);
-        }/*,
-
-        delete: function(req, callback) {
-        }*/
+            createAttachmentModel(req, function(err, attachmentModel) {
+                AttachmentService.update(attachmentModel, callback);
+            });
+        }
     };
 }
