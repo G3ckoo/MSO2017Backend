@@ -51,12 +51,12 @@ module.exports = function(Schemas) {
             Attachment.findByIdAndRemove(attachmentID, function(err, attachment) {
                 if (err) callback(err, attachment);
                 
-                AppStimmer.find().exec(function(err, appStimmerArray) {
-                    for (var appStimmer in appStimmerArray) {
-                        var index = appStimmer.attachments.indexOf(attachmentID);
-                        appStimmer.attachments.splice(index, 1);
-                        appStimmer.save(callback);
-                    }
+                AppStimmer.findById(attachment.appStimmer, function(err, appStimmer) {
+                    if (err) callback(err, null);
+                    
+                    var index = appStimmer.attachments.indexOf(attachment);
+                    appStimmer.attachments.splice(index, 1);
+                    appStimmer.save(callback);
                 });
             });
         }
