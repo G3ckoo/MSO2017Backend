@@ -13,7 +13,6 @@ module.exports = function(Schemas) {
                     AppStimmer.update({_id: appStimmerID}, { 
                         $push: { attachments: attachment } 
                     }, {}, function(err, appStimmer) {
-                        console.log("AppStimmer wurde aktualisiert: " + appStimmer);
                         callback(err, attachment);
                     });
                 }
@@ -49,10 +48,14 @@ module.exports = function(Schemas) {
 
         delete: function(attachmentID, callback) {
             Attachment.findByIdAndRemove(attachmentID, function(err, attachment) {
-                AppStimmer.update({}, { 
-                    $pop: { attachments: attachment } 
-                }, {}, function(err, appStimmer) {
-                    callback(err, attachment);
+                if (err) callback(err, attachment);
+                
+                AppStimmer.find().exec(function(err, appStimmerArray) {
+                    for (var appStimmer in appStimmerArray) {
+                        var index = appStimmer.attachments.indexOf(attachmentID);
+                        appStimmer.attachments.splice(index, 1);
+                        appStimmer.save(callback);
+                    }
                 });
             });
         }
