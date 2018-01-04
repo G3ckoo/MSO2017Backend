@@ -1,5 +1,8 @@
+var mongoose = require('mongoose');
+
 module.exports = function(Schemas) {
     var AppStimmer = Schemas.AppStimmer;
+    var Attachment = Schemas.Attachment;
     
     return {
         findById: function(id, callback) {
@@ -19,7 +22,11 @@ module.exports = function(Schemas) {
         },
 
         delete: function(id, callback) {
-            AppStimmer.findByIdAndRemove(id, callback);
+            AppStimmer.findByIdAndRemove(id, function(err, appStimmer) {
+                if (err) callback(err, null);
+                
+                Attachment.deleteMany({"appStimmer":mongoose.Types.ObjectId(id)}, callback);
+            });
         },
 
         upvote: function(id, callback) {
