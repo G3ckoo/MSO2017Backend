@@ -25,7 +25,10 @@ module.exports = function(Schemas) {
         },
 
         list: function(appStimmerID, callback) {
-            AppStimmer.findById(appStimmerID, 'attachments', callback);//.exec(callback);
+            AppStimmer.findById(appStimmerID, 'attachments').populate('attachments').exec(function(err, result) {
+                var attachments = result.attachments;
+                callback(err, attachments);
+            });
         },
         
         listAttachments: function(callback) {

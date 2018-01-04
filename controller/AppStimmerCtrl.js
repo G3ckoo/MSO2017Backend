@@ -29,8 +29,14 @@ module.exports = function(Schemas) {
         },
 
         insert: function(req, callback) {
-            var appStimmerModel = AppStimmerModel.create(req.body.title);
-            AppStimmerService.insert(appStimmerModel, callback);
+            if (req.body.title) {
+                var appStimmerModel = AppStimmerModel.create(req.body.title);
+                AppStimmerService.insert(appStimmerModel, callback);    
+            }
+            else {
+                var error = 'Es wurden nicht alle benötigten Parameter übergeben.';
+                callback(error, null);
+            }
         }
     }
 };

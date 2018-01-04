@@ -39,23 +39,14 @@ module.exports = function(app, Schemas) {
     });
     
     app.post("/AppStimmer", function(req, res) {
-        var error = '', status = 501, result;
-        if (req.body.title) {
-            AppStimmerCtrl.insert(req, function(err, appStimmer) {
-                defaultCallback(res, err, appStimmer);
-            });
-        }
-        else {
-            status = 400;
-            error = 'Es wurden nicht alle benötigten Parameter übergeben.';
-            res.status(status).send(Response.create(error, result));
-        }
+        AppStimmerCtrl.insert(req, function(err, appStimmer) {
+            defaultCallback(res, err, appStimmer);
+        });
     });
     
     app.delete("/AppStimmer/:id", function(req, res) {
         AppStimmerCtrl.delete(req, function(err) {
             if (err) {
-                console.log(error);
                 res.status(500).send(Response.create(err, {}));
             }
             else {
