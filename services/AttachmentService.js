@@ -14,6 +14,7 @@ module.exports = function(Schemas) {
                     AppStimmer.update({_id: appStimmerID}, { 
                         $push: { attachments: attachment } 
                     }, {}, function(err, appStimmer) {
+                        attachment.depopulate("appStimmer");
                         callback(err, attachment);
                     });
                 }
