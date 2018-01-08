@@ -5,13 +5,9 @@
   "main": "server.js",
   "author": "Marcel",
   "dependencies": {
-    "bcrypt": "^1.0.3",
     "bluebird": "^3.5.1",
     "body-parser": "^1.17.2",
-    "connect-mongo": "^2.0.0",
     "express": "^4.15.4",
-    "express-session": "^1.15.6",
-    "lokijs": "^1.5.1",
     "mongoose": "^4.13.7"
   },
   "scripts": {
